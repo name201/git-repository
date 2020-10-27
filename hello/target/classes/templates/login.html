@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
+    <script type="text/javascript" src="../ui/jquery.min.js"></script>
+    <script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>欢迎登录网站后台</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../js/index.js"></script>
+</head>
+
+<body>
+<div class="cms_login">
+    <div class="cms_login_container">
+
+        <div class="cms_login_text">欢迎登录网站后台</div>
+        <p align="center" style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+        <div class="cms_login_table">
+
+            <form id ="fm9" action="">
+                <div class="divBox"><span class="margin_right10">账号</span>
+                    <input type="text" name = "name" placeholder="请输入账号" class="cms_login_ipt">
+                </div>
+                <div class="divBox"><span class="margin_right10">密码</span>
+                    <input type="text" name = "password" placeholder="请输入密码" class="cms_login_ipt">
+                </div>
+                <br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+                <a onclick="abc();" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">登录</a>
+                &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a onclick="abc1();" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">注册</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+    var jsons ="";
+    var json ="";
+    function abc() {
+        $("#fm9").form("submit",{
+            url:"/user/log",
+            onSubmit:function () {
+                return true;
+            },
+            success:function (rtn) {
+                /*转换jsonstr为对象*/
+                 jsons =rtn;
+                 json = eval('('+jsons+')');
+                   // alert(json.status)
+                    if (json.status == 200) {
+                        $.ajax({
+                            success: function () {
+                                location.href = "/user/all1";
+                            }
+                        });
+                    } else if (json.status == 202) {
+                        $.ajax({
+                            success: function () {
+                                location.href = "/user/userAll";
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            success: function () {
+                                location.href = "/";
+                                alert("登陆失败")
+                            }
+                        });
+                    }
+            }
+
+        });
+    }
+
+    function abc1() {
+        $("#fm9").form("submit",{
+            onSubmit:function () {
+                return true;
+            },
+            success:function (ret) {
+                $.ajax({
+                    //url: 'user/logout',//验证数据的
+                    success: function () {
+
+                        location.href = "/user/zhuce";
+                    }
+                });
+            }
+
+        });
+    }
+
+</script>
+
+</html>

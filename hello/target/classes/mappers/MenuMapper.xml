@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--DAO接口-->
+<mapper namespace="com.example.hello.mapper.MenuMapper">
+<!-- 初始化菜单树 -->
+    <resultMap type="com.example.hello.vo.Tree" id="menuTree">
+        <id column="id" property="id" javaType="java.lang.String" />
+        <result column="text" property="text" javaType="java.lang.String" />
+        <result column="url" property="url" javaType="java.lang.String" />
+        <result column="icon" property="icon" javaType="java.lang.String" />
+        <result column="parentId" property="parentId" javaType="java.lang.String" />
+        <collection column="id" property="children" select="selectChild" />
+    </resultMap>
+
+<!-- 查找一级菜单 -->
+	<!-- 先查询菜单根级目录 -->
+	<!-- 这里的返回结果必须为resultMap，并且值为上面构建的resultMap的id的值 -->
+	<select id="selectMenuList" resultMap="menuTree">
+		select * from Menu where icon = '0' order by id asc
+	</select>
+
+    <!-- 查询二级菜单   根据id查询菜单 -->
+    <select id="selectChild" resultMap="menuTree">
+		select * from Menu where parentId = #{id}
+	</select>
+
+    <delete id="deleteMenuById" >
+        delete from Menu where id = #{id}
+    </delete>
+
+
+    <select id="selectById" resultMap="menuTree">
+        select id,text,url,icon,parentId from Menu where id = #{id}
+	</select>
+
+    <!--    根据id修改数据 -->
+    <update id="updateMenuById" >
+        update menu
+        <trim prefix="set" suffixOverrides="," suffix="where id = #{id}">
+            <if test='text != null and text != ""'>
+                text = #{text},
+            </if>
+            <if test='url != null and url != "" '>
+                url = #{url},
+            </if>
+            <if test='icon != null and icon != ""'>
+                icon = #{icon},
+            </if>
+            <if test='parentId != null and parentId != ""'>
+                parentId = #{parentId},
+            </if>
+        </trim>
+    </update>
+
+   <insert id="insertById">
+
+       <selectKey keyProperty="id" order="BEFORE" resultType="String">
+           select menu_squ.nextval from dual
+       </selectKey>
+        insert into menu
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">
+                 #{id},
+            </if>
+            <if test="text!=null and text!=''">
+                #{text},
+            </if>
+            <if test="url!=null and url!=''">
+                 #{url},
+            </if>
+            <if test="icon!=null and icon!=''">
+                 #{icon},
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                 #{parentId},
+            </if>
+
+        </trim>
+    </insert>
+
+ <!--   <insert id="insertById" >
+        insert into Menu values( #{id}, #{text}, #{url}, #{icon},#{parentId})
+	</insert>
+	<insert id="insertById">
+
+       <selectKey keyProperty="id" order="BEFORE" resultType="String">
+           select menu_squ.nextval from dual
+       </selectKey>
+        insert into menu
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">
+                 #{id},
+            </if>
+            <if test="text!=null and text!=''">
+                #{text},
+            </if>
+            <if test="url!=null and url!=''">
+                 #{url},
+            </if>
+            <if test="icon!=null and icon!=''">
+                 #{icon},
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                 #{parentId},
+            </if>
+
+        </trim>
+    </insert>
+
+	-->
+</mapper>

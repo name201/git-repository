@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
+    <script type="text/javascript" src="../ui/jquery.min.js"></script>
+    <script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>欢迎登录网站后台</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../js/index.js"></script>
+</head>
+
+<body>
+<div class="cms_login">
+    <div class="cms_login_container">
+        <div class="cms_login_text">欢迎登录网站后台</div>
+        <div class="cms_login_table">
+
+            <form id ="fm9" action="">
+                <div class="divBox"><span class="margin_right10">账号</span>
+                    <input type="text" name = "name" placeholder="请输入账号" class="cms_login_ipt">
+                </div>
+                <div class="divBox"><span class="margin_right10">密码</span>
+                    <input type="text" name = "password" placeholder="请输入密码" class="cms_login_ipt">
+                </div>
+                <div class="divBox"><span class="margin_right10">姓名</span>
+                    <input type="text" name = "username" placeholder="请输姓名" class="cms_login_ipt">
+                </div>
+                <div class="divBox"><span class="margin_right10">生日</span>
+                    <input type="date" name = "birthday" placeholder="请输生日" class="cms_login_ipt">
+                </div>
+
+                <br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+                <a onclick="abc();" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">返回登录</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a onclick="abc1();" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">注册</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+
+    function abc() {
+        $("#fm9").form("submit",{
+            url:"/user/log",
+            onSubmit:function () {
+                return true;
+            },
+            success:function (ret) {
+                    $.ajax({
+                        success: function () {
+                            location.href = "/";
+                        }
+                    });
+                }
+        });
+    }
+
+    function abc1() {
+        $("#fm9").form("submit",{
+            //查询数据
+            url:"/user/insertUser",
+
+            onSubmit:function () {
+
+                return true;
+            },
+            success:function (ret) {
+
+                if (ret!=null){
+                    $.ajax({
+                        success: function () {
+                            location.href = "/";
+                            alert("注册成功,请您登陆")
+
+                        }
+                    });
+                }else {
+                    $.ajax({
+                        //url: 'user/logout',//验证数据的
+                        success: function () {
+                            alert("注册失败...")
+                            location.href = "/user/zhuce";
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>菜单管理</title>
+
+	<link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
+	<script type="text/javascript" src="../ui/jquery.min.js"></script>
+	<script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../ui/jquery.serializejson.min.js"></script>
+	<script type="text/javascript" src="../js/menu.js"></script>
+
+</head>
+<!--布局-->
+<body class="easyui-layout" >
+<!-- 适应父容器大小 -->
+	<div data-options="region:'west',title:'使用中',split:true"
+		 style="width: 210%;">
+		<div>
+			<ul id="tt" class="easyui-tree">
+			</ul>
+		</div>
+	</div>
+
+	<div data-options="region:'center'">
+		<table id="grid">
+<!--
+			<tbody>
+			<tr th:each="demo:${session.demo}">
+				<td th:text="${demo.id}"></td>
+				<td th:text="${demo.name1}"></td>
+				<td th:text="${demo.name2}"></td>
+				<td th:text="${demo.name3}"></td>
+				<td th:text="${demo.name4}"></td>
+				<td th:text="${demo.name5}"></td>
+				<td th:text="${demo.menuId}"></td>
+				&lt;!&ndash;<td th:text="${#dates.format(emp.dates, 'yyyy-MM-dd')}"></td>&ndash;&gt;
+			</tr>
+			</tbody>-->
+		</table>
+
+	</div>
+<!-- 添加菜单表单 -->
+<div id="insertDlg">
+	<!-- 添加菜单表单 -->
+	<form id="insertForm" method="post">
+		<table style="width: 300px; text-align: center;">
+			<!--//th:name="null"   th:if="${not #strings.isEmpty(text)}-->
+			<tr>
+				<td align="right">菜单名称:</td>
+				<td align="left"><input name="text" type="text" /></td>
+			</tr>
+			<tr hidden="true">
+				<td align="right">对应URL:</td>
+				<td align="left"><input name="url" type="text"/></td>
+			</tr>
+
+			<tr >
+				<td align="right">菜单级别:</td>
+				<td align="left">
+					<select id="icon" class="easyui-combobox"
+							data-options="panelHeight:'50',required:true" editable="false" name="icon">
+						<option value="0">一级菜单</option>
+						<option value="1">二级菜单</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr hidden="true">
+				<td align="right">上级菜单编号:</td>
+				<td align="left">
+					<input name="parentId" type="text" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<div id="insertDlg2">
+	<!-- 添加菜单表单 -->
+	<form id="insertForm2" method="post">
+		<table style="width: 300px; text-align: center;">
+			<!--//th:name="null"   th:if="${not #strings.isEmpty(text)}-->
+			<tr>
+				<td align="right">菜单名称:</td>
+				<td align="left"><input name="text" type="text" /></td>
+			</tr>
+			<tr hidden="true">
+				<td align="right">对应URL:</td>
+				<td align="left"><input name="url" type="text"/></td>
+			</tr>
+
+			<tr hidden="true">
+				<td align="right">菜单级别:</td>
+				<td align="left">
+					<select id="icon2" class="easyui-combobox"
+							data-options="panelHeight:'50',required:true" editable="false" name="icon">
+						<option value="0">一级菜单</option>
+						<option value="1">二级菜单</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr hidden="true">
+				<td align="right">上级菜单编号:</td>
+				<td align="left">
+					<input name="parentId" type="text" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<div id="insertDlg1">
+	<!-- 添加数据表单 -->
+	<form id="insertForm1" method="post">
+		<table style="width: 300px; text-align: center;">
+
+			<tr id="tr1">
+				<td align="right" th:text="指标1"></td>
+				<td align="left"><input name="name1"  type="text" id="td1"/></td>
+			</tr>
+
+			<tr>
+				<td align="right" th:text="指标2"></td>
+				<td align="left"><input name="name2" value="" type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right" th:text="指标3"></td>
+				<td align="left"><input name="name3" value=""type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right" th:text="指标4"></td>
+				<td align="left"><input name="name4" value=""type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right" th:text="指标5"></td>
+				<td align="left"><input name="name5" value=""type="text"/></td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+
+ <script>
+
+</script>
+<!-- 修改菜单表单 -->
+<div id="updateDlg">
+	<form id="updateForm" method="post ">
+		<table style="text-align: center;">
+			<tr hidden="true">
+				<td align="right">编号:</td>
+				<td align="left"><input type="text" class="easyui-numberbox" name="id"/></td>
+			</tr>
+
+			<tr >
+				<td align="right">菜单名称:</td>
+				<td align="left"><input name="text" type="text"/></td>
+			</tr>
+
+			<tr hidden="true">
+				<td align="right">对应URL:</td>
+				<td align="left"><input name="url" type="text"/></td>
+			</tr>
+
+			<tr hidden="true">
+				<td  align="right">菜单级别:</td>
+				<td align="left">
+					<!--<input  name="icon" type="text" />-->
+					<select  id="icon1" class="easyui-combobox"
+							data-options="panelHeight:'50',required:true" editable="false" name="icon">
+							<option value="0">一级菜单</option>
+							<option value="1">二级菜单</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr hidden="true">
+				<td align="right">上级菜单编号:</td>
+				<td align="left">
+					<input id="pid" name="parentId" type="text" readOnly/>
+				</td>
+			</tr>
+
+		</table>
+	</form>
+</div>
+
+<!-- 修改表单表单 -->
+<div id="updateDlg1">
+	<form id="updateForm1" method="post ">
+		<table style="text-align: center;">
+			<tr hidden="true">
+				<td align="right">编号:</td>
+				<td align="left"><input type="text" class="easyui-numberbox" name="id"/></td>
+			</tr>
+			<tr>
+				<td align="right">指标1:</td>
+				<td align="left"><input name="name1" type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right">指标2:</td>
+				<td align="left"><input name="name2" type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right">指标3:</td>
+				<td align="left"><input name="name3" type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right">指标4:</td>
+				<td align="left"><input name="name4" type="text"/></td>
+			</tr>
+			<tr>
+				<td align="right">指标5:</td>
+				<td align="left"><input name="name5" type="text"/></td>
+			</tr>
+
+<!--			<tr>
+				<td align="right">是否是父菜单:</td>
+				<td align="left">
+					<select id="is_parent_update" class="easyui-combobox"
+							data-options="panelHeight:'100',required:true" editable="false" name="menuId">
+						<option value="0">一级菜单</option>
+						<option value="1">二级菜单</option>
+						<option value="2">三级菜单</option>
+					</select>
+				</td>
+			</tr>-->
+		</table>
+	</form>
+</div>
+
+<!-- 导入窗口 -->
+<div id="importDlg" style="padding: 2px;">
+	<form id="importForm" enctype="multipart/form-data">
+		导入文件:<input type="file" name="file">
+	</form>
+</div>
+
+<!-- 树形菜单的右键设置 -->
+<div id="mm" class="easyui-menu" style="width: 120px;">
+	<div data-options="iconCls:'icon-add'">添加</div>
+	<div data-options="iconCls:'icon-save'">修改</div>
+	<div data-options="iconCls:'icon-cut'">删除</div>
+	<!--<div data-options="iconCls:'icon-delete'">删除</div>-->
+	<!--<div data-options="iconCls:'icon-undo'">重命名</div>-->
+</div>
+<!-- 树形菜单右键重命名设置 -->
+<div id="renameDlg">
+	<form id="renameForm" method="post">
+		新名称:<input type="text" name="menuname"/>
+	</form>
+</div>
+
+</body>
+
+</html>

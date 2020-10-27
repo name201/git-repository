@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--DAO接口-->
+<mapper namespace="com.example.hello.mapper.DemoMapper">
+<!-- 初始化菜单树 -->
+    <resultMap type="com.example.hello.entity.Demo" id="demo">
+        <id column="id" property="id" javaType="java.lang.Long" />
+        <result column="name1" property="name1" javaType="java.lang.String" />
+        <result column="name2" property="name2" javaType="java.lang.String" />
+        <result column="name3" property="name3" javaType="java.lang.String" />
+        <result column="name4" property="name4" javaType="java.lang.String" />
+        <result column="name5" property="name5" javaType="java.lang.String" />
+        <result column="name5" property="name5" javaType="java.lang.String" />
+        <result column="menuId" property="menuId" javaType="java.lang.String" />
+       <!-- <collection column="id" property="children" select="selectChild" />-->
+    </resultMap>
+    <!--根据menuId查询,分页-->
+    <select id="selectMenuById" resultMap="demo">
+		select id,name1,name2,name3,name4,name5,menuId, rownum rn from(select id,name1,name2,name3,name4,name5,menuId,rownum rn from (select id,name1,name2,name3,name4,name5,menuId from Demo order by id ) f1 where menuId = #{menuId})  f2 where rn between ((${page}-1)*${rows}+1) and (${page}*${rows})
+	</select>
+
+    <!--根据menuId查询,导出-->
+    <select id="selectDemoExport" resultMap="demo">
+		select id,name1,name2,name3,name4,name5,menuId from (select id,name1,name2,name3,name4,name5,menuId from Demo order by id )  where menuId = #{menuId}
+	</select>
+
+    <!--根据所有-->
+    <select id="selectDemoAllCount" resultType="int">
+		select count(*) from Demo where menuId=#{menuId}
+	</select>
+
+
+    <!--根据所有查询-->
+    <select id="selectDemos" resultMap="demo">
+		select id,name1,name2,name3,name4,name5,menuId from (select id,name1,name2,name3,name4,name5,menuId from Demo order by id)  where name1 = #{name1} and name2 = #{name2} and name3 = #{name3} and name4 = #{name4} and name5 = #{name5}and menuId = #{menuId}
+	</select>
+
+    <!--插入数据-->
+    <insert id="insertDemoById">
+        <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+            select Demo_squ.nextval from dual
+        </selectKey>
+        insert into Demo
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">
+                #{id},
+            </if>
+            <if test="name1!=null ">
+                #{name1},
+            </if>
+            <if test="name2!=null ">
+                #{name2},
+            </if>
+            <if test="name3!=null ">
+                #{name3},
+            </if>
+            <if test="name4!=null ">
+                #{name4},
+            </if>
+            <if test="name5!=null ">
+                #{name5},
+            </if>
+            <if test='menuId!=null'>
+                #{menuId},
+            </if>
+           <!-- <if test='name1==null and name==""'>
+                null ,
+            </if>
+            <if test='name2==null and name2==""'>
+                null,
+            </if>
+            <if test='name3==null and name3==""'>
+                null,
+            </if>
+            <if test='name4==null and name4==""'>
+                null,
+            </if>
+            <if test="name5==null and name5==''">
+                null,
+            </if>-->
+
+        </trim>
+    </insert>
+
+    <update id="updateDemoById" >
+        update Demo
+        <trim prefix="set" suffixOverrides="," suffix="where id = #{id}">
+            <if test='name1 != null and name1 != ""'>
+                name1 = #{name1},
+            </if>
+            <if test='name2 != null and name2 != "" '>
+                name2 = #{name2},
+            </if>
+            <if test='name3 != null and name3 != ""'>
+                name3 = #{name3},
+            </if>
+            <if test='name4 != null and name4 != ""'>
+                name4 = #{name4},
+            </if>
+            <if test='name5 != null and name5 != ""'>
+                name5 = #{name5},
+            </if>
+
+        </trim>
+    </update>
+
+    <delete id="deleteDemoById" >
+        delete from demo where id = #{id}
+    </delete>
+   <!--
+
+
+    <select id="selectById" resultMap="menuTree">
+        select id,text,url,icon,parentId from Menu where id = #{id}
+	</select>
+
+    &lt;!&ndash;    根据id修改数据 &ndash;&gt;
+
+
+-->
+
+</mapper>
